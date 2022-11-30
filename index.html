@@ -33,17 +33,28 @@
         <!-- <div class="fullHeightLimitWidth"></div> -->   
         <div id="flex_weights_container">
             <div id="flex_weights_subcontainer">
-                <div id="weights"></div>
+                <!-- In reverse because flex:column-reverse! -->
+                <div id="face">
+                    <div id="user_hat">
+                        
+                    </div>
+                </div>
                 <div id="weight_tray">
+                    
+                    <div id="cat1BarComplete" class="completed-weight"></div>
                     <div id="cat1Bar"></div>
+                    
+                    <div id="cat2BarComplete" class="completed-weight"></div>
                     <div id="cat2Bar"></div>
+                    
+                    <div id="cat3BarComplete" class="completed-weight"></div>
                     <div id="cat3Bar"></div>
                 </div>
-                <div id="face"></div>
+                <div id="weights"></div>
             </div>
         </div>
 
-        <div style="position: fixed; bottom:0;">
+        <div style="position: fixed; bottom:0; opacity: 20%;">
             <div>
                 <select title="categorySelectorDemo" name="categorySelectorDemo" id="categorySelectorDemo">
                     <option value=".cat1">cat1</option>
@@ -56,8 +67,8 @@
                     <option value=".priority2">❗❗</option>
                     <option value=".priority3">❗❗❗</option>
                 </select>
-                <button type="button" onclick="removeLastWeightOfClass($('#categorySelectorDemo').val() + $('#prioritySelectorDemo').val());">Remove Weight</button>
-                <button type="button" onclick="removeEveryWeight();">Remove ALL Weights</button>
+                <!-- <button type="button" onclick="removeLastWeightOfClass($('#categorySelectorDemo').val() + $('#prioritySelectorDemo').val());">Remove Weight</button> -->
+                <!-- <button type="button" onclick="removeEveryWeight();">Remove ALL Weights</button> -->
                 <button type="button" onclick="removeCompletedWeights();">Remove completed Weights</button>
                 <button type="button" onclick="createWeightOfClass($('#categorySelectorDemo').val(), $('#prioritySelectorDemo').val(), true);">Create Weight</button>
             </div>

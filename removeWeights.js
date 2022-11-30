@@ -1,6 +1,7 @@
 const possibleCat = ["cat1", "cat2", "cat3"];
 const possiblePriorities = ["priority0", "priority1", "priority2", "priority3"];
-const minFaceSize = 90;
+const minFaceSize = .05;
+const tasksAtMaxFaceSquish = 100;
 
 weightDeleteTimeout = Promise;
 
@@ -9,8 +10,8 @@ numCat2 = 0;
 numCat3 = 0;
 
 
-// updateBar();
-DEBUGaddRandomWeights();
+updateBar();
+// DEBUGaddRandomWeights();
 
 // $(".weight").click(function(){
 //     // $(this).toggleClass("completed-weight");
@@ -31,10 +32,15 @@ function respaceWeights(){
     updateBar();
 
     clearTimeout(weightDeleteTimeout);
-    weightDeleteTimeout = setTimeout('respaceWeightsPartTwo()', 2000);
+    weightDeleteTimeout = setTimeout('respaceWeightsPartTwo()', 1100);
 }
 
 function respaceWeightsPartTwo(){
+    let coinsEarned = $(".completed-weight.priority0").length;
+    coinsEarned += $(".completed-weight.priority1").length*2;
+    coinsEarned += $(".completed-weight.priority2").length*4;
+    coinsEarned += $(".completed-weight.priority3").length*16;
+
     const weightsToRemove = $(".removed-weight");
     const numOfWeightsRemoved = weightsToRemove.length;
     // console.log(numOfWeightsRemoved);
@@ -44,29 +50,44 @@ function respaceWeightsPartTwo(){
     if(weightsWereMoved || numOfWeightsRemoved>0){
         $(".weight").addClass("moved-weight");
     }
+    
+    if(coinsEarned > 0){
+        alert("You earned "+coinsEarned+" coins! Great work!");
+    }
 }
 
 function updateBar(){
-    numCat1 = $(".cat1.priority0:not(.removed-weight)").length*1;
-    numCat1 += $(".cat1.priority1:not(.removed-weight)").length*2;
-    numCat1 += $(".cat1.priority2:not(.removed-weight)").length*4;
-    numCat1 += $(".cat1.priority3:not(.removed-weight)").length*16;
-    
-    numCat2 = $(".cat2.priority0:not(.removed-weight)").length*1;
-    numCat2 += $(".cat2.priority1:not(.removed-weight)").length*2;
-    numCat2 += $(".cat2.priority2:not(.removed-weight)").length*4;
-    numCat2 += $(".cat2.priority3:not(.removed-weight)").length*16;
+    numCat1 = $(".cat1.priority0:not(.completed-weight):not(.removed-weight)").length*1;
+    numCat1 += $(".cat1.priority1:not(.completed-weight):not(.removed-weight)").length*2;
+    numCat1 += $(".cat1.priority2:not(.completed-weight):not(.removed-weight)").length*4;
+    numCat1 += $(".cat1.priority3:not(.completed-weight):not(.removed-weight)").length*16;
 
-    numCat3 = $(".cat3.priority0:not(.removed-weight)").length*1;
-    numCat3 += $(".cat3.priority1:not(.removed-weight)").length*2;
-    numCat3 += $(".cat3.priority2:not(.removed-weight)").length*4;
-    numCat3 += $(".cat3.priority3:not(.removed-weight)").length*16;
+    numCat2 = $(".cat2.priority0:not(.completed-weight):not(.removed-weight)").length*1;
+    numCat2 += $(".cat2.priority1:not(.completed-weight):not(.removed-weight)").length*2;
+    numCat2 += $(".cat2.priority2:not(.completed-weight):not(.removed-weight)").length*4;
+    numCat2 += $(".cat2.priority3:not(.completed-weight):not(.removed-weight)").length*16;
 
-    console.log(numCat1);
-    console.log(numCat2);
-    console.log(numCat3);
+    numCat3 = $(".cat3.priority0:not(.completed-weight):not(.removed-weight)").length*1;
+    numCat3 += $(".cat3.priority1:not(.completed-weight):not(.removed-weight)").length*2;
+    numCat3 += $(".cat3.priority2:not(.completed-weight):not(.removed-weight)").length*4;
+    numCat3 += $(".cat3.priority3:not(.completed-weight):not(.removed-weight)").length*16;
 
-    let totalWeight = numCat1 + numCat2 + numCat3;
+    let numCat1Complete = $(".cat1.priority0.completed-weight:not(.removed-weight)").length*1;
+    numCat1Complete += $(".cat1.priority1.completed-weight:not(.removed-weight)").length*2;
+    numCat1Complete += $(".cat1.priority2.completed-weight:not(.removed-weight)").length*4;
+    numCat1Complete += $(".cat1.priority3.completed-weight:not(.removed-weight)").length*16;
+
+    let numCat2Complete = $(".cat2.priority0.completed-weight:not(.removed-weight)").length*1;
+    numCat2Complete += $(".cat2.priority1.completed-weight:not(.removed-weight)").length*2;
+    numCat2Complete += $(".cat2.priority2.completed-weight:not(.removed-weight)").length*4;
+    numCat2Complete += $(".cat2.priority3.completed-weight:not(.removed-weight)").length*16;
+
+    let numCat3Complete = $(".cat3.priority0.completed-weight:not(.removed-weight)").length*1;
+    numCat3Complete += $(".cat3.priority1.completed-weight:not(.removed-weight)").length*2;
+    numCat3Complete += $(".cat3.priority2.completed-weight:not(.removed-weight)").length*4;
+    numCat3Complete += $(".cat3.priority3.completed-weight:not(.removed-weight)").length*16;
+
+    let totalWeight = numCat1 + numCat2 + numCat3 + numCat1Complete + numCat2Complete + numCat3Complete;
     if (totalWeight <= 0){
         $("#weight_tray").addClass("removed-tray");
         // $("#weight_tray").fadeOut();
@@ -80,17 +101,21 @@ function updateBar(){
     $("#cat1Bar").css('flex-grow',numCat1);
     $("#cat2Bar").css('flex-grow',numCat2);
     $("#cat3Bar").css('flex-grow',numCat3);
+    $("#cat1BarComplete").css('flex-grow',numCat1Complete);
+    $("#cat2BarComplete").css('flex-grow',numCat2Complete);
+    $("#cat3BarComplete").css('flex-grow',numCat3Complete);
 
-    // totalWeight = Math.min(totalWeight, minFaceSize);
-    // const faceHeight = (100-totalWeight).toString()+"%";
+    let faceHeight = (tasksAtMaxFaceSquish-totalWeight)/tasksAtMaxFaceSquish;
     // console.log("totalWeight: " + totalWeight);
-    // console.log("faceHeight: " + faceHeight);
-    // $("#face").css('flex-basis', faceHeight);
+    faceHeight = Math.max(minFaceSize, faceHeight);
+    console.log("faceHeight: " + faceHeight);
+    $(":root").css('--faceHeightPercent', faceHeight);
 }
 
 function removeLastWeightOfClass(targetParams){
     // const targetParams = category+priority;
     const targetWeight = $(targetParams+":not(.removed-weight)");
+    targetWeight.removeClass("new-weight");
     //end and print error if no matching weight is found
     if(targetWeight.length == 0){
         console.warn("Tried to remove a weight that doesn't exist: " + targetParams);
@@ -106,7 +131,9 @@ function removeEveryWeight(){
 }
 //removes every completed weight
 function removeCompletedWeights(){
+    
     repeatWithDelay(removeLastWeightOfClass, $(".completed-weight").length, [".completed-weight"], 200, 3000);
+
 }
 
 //creates a new weight and places it at the end of the weights
@@ -139,8 +166,9 @@ function createWeightOfClass(category, priority, animate=false){
     }
 
     // debug, remove this
-    newWeight.click(function(){
+    newWeight.on("click", function(){
         $(this).toggleClass("completed-weight");
+        updateBar();
     });
     
 }
